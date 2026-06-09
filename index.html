@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaquetExpress Nacional - Envíos a Todo el País</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #FF6B00;
+      --primary-dark: #e05f00;
+      --secondary: #1A1A2E;
+      --accent: #16213E;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: var(--secondary);
+      padding: 0 5%;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      color: var(--white);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .logo-text span { color: var(--primary); }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--primary); }
+
+    .nav-cta {
+      background: var(--primary) !important;
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+    }
+
+    .nav-cta:hover { background: var(--primary-dark) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .hamburger span {
+      width: 25px; height: 3px;
+      background: white;
+      border-radius: 3px;
+      transition: 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: var(--secondary);
+      padding: 20px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: #ccc;
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+      font-size: 1rem;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 60%, #0f3460 100%);
+      display: flex;
+      align-items: center;
+      padding: 100px 5% 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; right: -20%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-content {
+      max-width: 600px;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,107,0,0.2);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      color: white;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span { color: var(--primary); }
+
+    .hero p {
+      color: #aab;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 35px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255,107,0,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      padding: 14px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: left; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .stat-label { color: #aab; font-size: 0.9rem; }
+
+    /* TRACKING */
+    .tracking-section {
+      background: white;
+      padding: 40px 5%;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    }
+
+    .tracking-box {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .tracking-box h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+
+    .tracking-input-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tracking-input-group input {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 30px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .tracking-input-group input:focus { border-color: var(--primary); }
+
+    .tracking-result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff8f0;
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      display: none;
+      text-align: left;
+    }
+
+    /* SERVICES */
+    section { padding: 80px 5%; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      background: rgba(255,107,0,0.1);
+      color: var(--primary);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+
+    .section-header p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 16px;
+      padding: 35px 30px;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.07);
+      transition: all 0.3s;
+      border: 1px solid #f0f0f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--primary);
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+
+    .service-icon {
+      width: 60px; height: 60px;
+      background: rgba(255,107,0,0.1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .service-card h3 {
+      font-size: 1.2rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      color: var(--gray);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .service-badge {
+      display: inline-block;
+      margin-top: 15px;
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* HOW IT WORKS */
+    .how-section { background: var(--light); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      position: relative;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 30px 20px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 70px; height: 70px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 25px rgba(255,107,0,0.3);
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+
+    .step-card p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.07);
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border-color: var(--primary);
+      transform: scale(1.03);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -15px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 5px 20px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .pricing-card h3 {
+      font-size: 1.3rem;
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 15px 0;
+    }
+
+    .price span {
+      font-size: 1rem;
+      color: var(--gray);
+      font-weight: 400;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin: 20px 0 30px;
+      text-align: left;
+    }
+
+    .pricing-features li {
+      padding: 8px 0;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--primary);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* COVERAGE */
+    .coverage-section { background: var(--secondary); color: white; }
+    .coverage-section .section-header h2 { color: white; }
+    .coverage-section .section-header p { color: #aab; }
+
+    .coverage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .coverage-state {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .coverage-state:hover {
+      background: rgba(255,107,0,0.2);
+      border-color: var(--primary);
+    }
+
+    .coverage-state .flag { font-size: 1.5rem; margin-bottom: 5px; }
+    .coverage-state p { font-size: 0.85rem; color: #ccc; }
+
+    /* TESTIMONIALS */
+    .testimonials-section { background: var(--light); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+    }
+
+    .stars { color: #FFB800; font-size: 1.1rem; margin-bottom: 15px; }
+
+    .testimonial-card p {
+      color: #555;
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reviewer-avatar {
+      width: 45px; height: 45px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .reviewer-info strong { font-size: 0.95rem; color: var(--secondary); }
+    .reviewer-info span { font-size: 0.8rem; color: var(--gray); display: block; }
+
+    /* FAQ */
+    .faq-list { max-width: 800px; margin: 0 auto; }
+
+    .faq-item {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 20px 25px;
+      text-align: left;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: color 0.3s;
+    }
+
+    .faq-question:hover { color: var(--primary); }
+
+    .faq-answer {
+      padding: 0 25px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    .faq-answer.open {
+      padding: 0 25px 20px;
+      max-height: 200px;
+    }
+
+    .faq-icon { transition: transform 0.3s; font-style: normal; }
+    .faq-icon.open { transform: rotate(45deg); }
+
+    /* CONTACT */
+    .contact-section { background: var(--light); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      margin-bottom: 20px;
+    }
+
+    .contact-info p {
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .contact-detail-icon {
+      width: 45px; height: 45px;
+      background: rgba(255,107,0,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .contact-detail strong {
+      display: block;
+      color: var(--secondary);
+      margin-bottom: 3px;
+    }
+
+    .contact-detail span { color: var(--gray); font-size: 0.9rem; }
+
+    .contact-form {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      color: #333;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-success {
+      display: none;
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--secondary);
+      color: #aab;
+      padding: 60px 5% 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand p {
+      color: #88a;
+      line-height: 1.7;
+      margin: 15px 0 20px;
+      font-size: 0.9rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .social-link:hover { background: var(--primary); }
+
+    .footer-col h4 {
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      color: #88a;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .footer-col ul li a:hover { color: var(--primary); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      font-size: 0.85rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-bottom-links a {
+      color: #88a;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom-links a:hover { color: var(--primary); }
+
+    /* WHATSAPP FLOAT */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 25px; right: 25px;
+      background: #25D366;
+      color: white;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(37,211,102,0.4);
+      z-index: 500;
+      transition: transform 0.3s;
+    }
+
+    .whatsapp-float:hover { transform: scale(1.1); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding: 100px 5% 40px; }
+      .hero-stats { gap: 25px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .pricing-card.featured { transform: scale(1); }
+      .contact-form { padding: 25px; }
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.6s ease forwards; }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="#inicio" class="logo">
+    <div class="logo-icon">📦</div>
+    <div class="logo-text">Paquete<span>Express</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#cobertura">Cobertura</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#rastreo" class="nav-cta">Rastrear Envío</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#servicios" onclick="toggleMenu()">📦 Servicios</a>
+  <a href="#precios" onclick="toggleMenu()">💰 Precios</a>
+  <a href="#cobertura" onclick="toggleMenu()">🗺️ Cobertura</a>
+  <a href="#faq" onclick="toggleMenu()">❓ Preguntas Frecuentes</a>
+  <a href="#contacto" onclick="toggleMenu()">📞 Contacto</a>
+  <a href="#rastreo" onclick="toggleMenu()" style="color:var(--primary);font-weight:700;">📍 Rastrear Envío</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-content fade-up">
+    <div class="hero-badge">🚀 SERVICIO NACIONAL #1 EN CONFIABILIDAD</div>
+    <h1>Envíos Rápidos y Seguros a <span>Todo el País</span></h1>
+    <p>Conectamos a México con soluciones de paquetería ágiles, confiables y económicas. Tu paquete en las mejores manos, garantizado.</p>
+    <div class="hero-btns">
+      <a href="#cotizar" class="btn-primary">Cotizar Envío</a>
+      <a href="#servicios" class="btn-outline">Ver Servicios</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">+50K</div>
+        <div class="stat-label">Clientes activos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">32</div>
+        <div class="stat-label">Estados cubiertos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">99%</div>
+        <div class="stat-label">Entregas exitosas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Soporte activo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RASTREO -->
+<div class="tracking-section" id="rastreo">
+  <div class="tracking-box">
+    <h2>📍 Rastrea tu Envío en Tiempo Real</h2>
+    <p style="color:var(--gray);margin-bottom:20px;">Ingresa tu número de guía para conocer el estado de tu paquete.</p>
+    <div class="tracking-input-group">
+      <input type="text" id="trackingInput" placeholder="Ej: PEX-2024-00123456" />
+      <button class="btn-primary" onclick="trackPackage()">Rastrear</button>
+    </div>
+    <div class="tracking-result" id="trackingResult"></div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">NUESTROS SERVICIOS</div>
+    <h2>Soluciones para Cada Necesidad</h2>
+    <p>Desde envíos express hasta logística empresarial, tenemos el servicio perfecto para ti.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">⚡</div>
+      <h3>Envío Express</h3>
+      <p>Entrega en menos de 24 horas en las principales ciudades del país. Ideal para documentos urgentes y paquetes pequeños.</p>
+      <span class="service-badge">Desde $89 MXN</span>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">📦</div>
+      <h3>Envío Estándar</h3>
+      <p>La opción más económica con entrega de 3 a 5 días hábiles. Perfecto para paquetes medianos y grandes a todo México.</p>
+      <span class="service-badge">Desde $49 MXN</span>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">🏢</div>
+      <h3>Solución Empresarial</h3>
+      <p>Planes personalizados para negocios con alto volumen de envíos. Incluye recolección en sucursal y facturación empresarial.</p>
+      <span class="service-badge">Plan a medida</span>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">🌡️</div>
+      <h3>Carga Especial</h3>
+      <p>Manejo cuidadoso para productos frágiles, electrónicos, medicamentos y artículos de valor. Embalaje especializado incluido.</p>
+      <span class="service-badge">Consultar precio</span>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">↩️</div>
+      <h3>Devoluciones</h3>
+      <p>Gestión de devoluciones sin complicaciones para e-commerce. Simplifica el proceso de regreso para tus clientes.</p>
+      <span class="service-badge">Desde $39 MXN</span>
+    </div>
+    <div class="service-card scroll-reveal">
+      <div class="service-icon">🔒</div>
+      <h3>Envío con Seguro</h3>
+      <p>Protección total para tu mercancía. Cobertura de hasta $50,000 MXN en caso de pérdida o daño durante el traslado.</p>
+      <span class="service-badge">+$15 MXN adicional</span>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how-section">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">¿CÓMO FUNCIONA?</div>
+    <h2>Enviar es Más Fácil de lo que Piensas</h2>
+    <p>En 4 simples pasos tu paquete llega a su destino de forma segura y rápida.</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card scroll-reveal">
+      <div class="step-number">1</div>
+      <div class="step-icon">📝</div>
+      <h3>Cotiza y Solicita</h3>
+      <p>Ingresa los datos de origen, destino y peso de tu paquete para obtener el mejor precio.</p>
+    </div>
+    <div class="step-card scroll-reveal">
+      <div class="step-number">2</div>
+      <div class="step-icon">🚚</div>
+      <h3>Recolección</h3>
+      <p>Nuestros repartidores pasan por tu domicilio o puedes llevar tu paquete a cualquier sucursal.</p>
+    </div>
+    <div class="step-card scroll-reveal">
+      <div class="step-number">3</div>
+      <div class="step-icon">📍</div>
+      <h3>Seguimiento</h3>
+      <p>Rastrea tu envío en tiempo real desde nuestra plataforma o app móvil con actualizaciones al instante.</p>
+    </div>
+    <div class="step-card scroll-reveal">
+      <div class="step-number">4</div>
+      <div class="step-icon">✅</div>
+      <h3>Entrega Exitosa</h3>
+      <p>Tu destinatario recibe el paquete con firma digital como comprobante de entrega garantizada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">NUESTROS PRECIOS</div>
+    <h2>Tarifas Transparentes Sin Sorpresas</h2>
+    <p>Elige el plan que mejor se adapte a tus necesidades. Sin costos ocultos, siempre.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card scroll-reveal">
+      <h3>Básico</h3>
+      <p style="color:var(--gray);font-size:0.9rem;">Para envíos ocasionales</p>
+      <div class="price">$49 <span>/ envío</span></div>
+      <ul class="pricing-features">
+        <li>Hasta 5 kg por paquete</li>
+        <li>Entrega en 3-5 días hábiles</li>
+        <li>Rastreo en línea básico</li>
+        <li>Cobertura nacional</li>
+        <li>Soporte por WhatsApp</li>
+      </ul>
+      <a href="#contacto" class="btn-primary" style="width:100%;text-align:center;display:block;">Comenzar</a>
+    </div>
+    <div class="pricing-card featured scroll-reveal">
+      <div class="featured-badge">⭐ MÁS POPULAR</div>
+      <h3>Express</h3>
+      <p style="color:var(--gray);font-size:0.9rem;">Para quienes no pueden esperar</p>
+      <div class="price">$89 <span>/ envío</span></div>
+      <ul class="pricing-features">
+        <li>Hasta 10 kg por paquete</li>
+        <li>Entrega en 24 horas</li>
+        <li>Rastreo en tiempo real</li>
+        <li>Notificaciones SMS/email</li>
+        <li>Seguro básico incluido</li>
+        <li>Soporte prioritario 24/7</li>
+      </ul>
+      <a href="#contacto" class="btn-primary" style="width:100%;text-align:center;display:block;">Comenzar</a>
+    </div>
+    <div class="pricing-card scroll-reveal">
+      <h3>Empresarial</h3>
+      <p style="color:var(--gray);font-size:0.9rem;">Para negocios y e-commerce</p>
+      <div class="price">A <span>medida</span></div>
+      <ul class="pricing-features">
+        <li>Volumen ilimitado</li>
+        <li>Tarifas preferenciales</li>
+        <li>API de integración</li>
+        <li>Ejecutivo de cuenta</li>
+        <li>Facturación automatizada</li>
+        <li>Reportes mensuales</li>
+      </ul>
+      <a href="#contacto" class="btn-outline" style="width:100%;text-align:center;display:block;border:2px solid var(--primary);color:var(--primary);">Contactar asesor</a>
+    </div>
+  </div>
+</section>
+
+<!-- COTIZADOR -->
+<section id="cotizar" style="background:var(--light);">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">COTIZADOR</div>
+    <h2>Calcula el Costo de tu Envío</h2>
+    <p>Obtén un precio estimado en segundos.</p>
+  </div>
+  <div style="max-width:700px;margin:0 auto;background:white;padding:40px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.08);" class="scroll-reveal">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Ciudad de Origen</label>
+        <select id="cOrigen">
+          <option>Ciudad de México</option>
+          <option>Guadalajara</option>
+          <option>Monterrey</option>
+          <option>Puebla</option>
+          <option>Tijuana</option>
+          <option>León</option>
+          <option>Juárez</option>
+          <option>Mérida</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ciudad de Destino</label>
+        <select id="cDestino">
+          <option>Guadalajara</option>
+          <option>Ciudad de México</option>
+          <option>Monterrey</option>
+          <option>Puebla</option>
+          <option>Tijuana</option>
+          <option>León</option>
+          <option>Juárez</option>
+          <option>Mérida</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Peso (kg)</label>
+        <input type="number" id="cPeso" placeholder="Ej: 2.5" min="0.1" max="100" />
+      </div>
+      <div class="form-group">
+        <label>Tipo de Servicio</label>
+        <select id="cServicio">
+          <option value="49">Estándar (3-5 días) — desde $49</option>
+          <option value="89">Express (24 hrs) — desde $89</option>
+          <option value="39">Devolución — desde $39</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="calcularCotizacion()" style="width:100%;">Calcular Precio Estimado</button>
+    <div id="cotizacionResult" style="margin-top:20px;display:none;padding:20px;background:#fff8f0;border:2px solid var(--primary);border-radius:12px;text-align:center;">
+      <p style="color:var(--gray);margin-bottom:5px;">Precio estimado de tu envío:</p>
+      <div style="font-size:2rem;font-weight:800;color:var(--primary);" id="cotizacionPrecio"></div>
+      <p style="color:var(--gray);font-size:0.85rem;margin-top:5px;">*Precio final puede variar según dimensiones y zona</p>
+    </div>
+  </div>
+</section>
+
+<!-- COBERTURA -->
+<section class="coverage-section" id="cobertura">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">COBERTURA NACIONAL</div>
+    <h2>Llegamos a los 32 Estados de México</h2>
+    <p>Nuestra red de distribución cubre cada rincón del país, desde la frontera norte hasta el sureste.</p>
+  </div>
+  <div class="coverage-grid scroll-reveal">
+    <div class="coverage-state"><div class="flag">🏙️</div><p>CDMX</p></div>
+    <div class="coverage-state"><div class="flag">🌵</div><p>Jalisco</p></div>
+    <div class="coverage-state"><div class="flag">🏔️</div><p>Nuevo León</p></div>
+    <div class="coverage-state"><div class="flag">🌊</div><p>Veracruz</p></div>
+    <div class="coverage-state"><div class="flag">🌺</div><p>Oaxaca</p></div>
+    <div class="coverage-state"><div class="flag">🦋</div><p>Michoacán</p></div>
+    <div class="coverage-state"><div class="flag">🏖️</div><p>Guerrero</p></div>
+    <div class="coverage-state"><div class="flag">🌅</div><p>Yucatán</p></div>
+    <div class="coverage-state"><div class="flag">🌴</div><p>Quintana Roo</p></div>
+    <div class="coverage-state"><div class="flag">⛰️</div><p>Chihuahua</p></div>
+    <div class="coverage-state"><div class="flag">🎭</div><p>Puebla</p></div>
+    <div class="coverage-state"><div class="flag">🌾</div><p>Guanajuato</p></div>
+    <div class="coverage-state"><div class="flag">🦎</div><p>Sonora</p></div>
+    <div class="coverage-state"><div class="flag">🌊</div><p>Baja California</p></div>
+    <div class="coverage-state"><div class="flag">🌿</div><p>Tabasco</p></div>
+    <div class="coverage-state"><div class="flag">🐊</div><p>Chiapas</p></div>
+    <div class="coverage-state"><div class="flag">🌻</div><p>Hidalgo</p></div>
+    <div class="coverage-state"><div class="flag">🌵</div><p>Coahuila</p></div>
+    <div class="coverage-state"><div class="flag">🎡</div><p>Estado Mex.</p></div>
+    <div class="coverage-state"><div class="flag">🐚</div><p>Sinaloa</p></div>
+    <div class="coverage-state"><div class="flag">🌮</div><p>Tamaulipas</p></div>
+    <div class="coverage-state"><div class="flag">🌲</div><p>Durango</p></div>
+    <div class="coverage-state"><div class="flag">🦅</div><p>Zacatecas</p></div>
+    <div class="coverage-state"><div class="flag">💧</div><p>Nayarit</p></div>
+    <div class="coverage-state"><div class="flag">🌄</div><p>San Luis Potosí</p></div>
+    <div class="coverage-state"><div class="flag">🌴</div><p>Campeche</p></div>
+    <div class="coverage-state"><div class="flag">🌊</div><p>Colima</p></div>
+    <div class="coverage-state"><div class="flag">🌿</div><p>Tlaxcala</p></div>
+    <div class="coverage-state"><div class="flag">🐢</div><p>Morelos</p></div>
+    <div class="coverage-state"><div class="flag">🌋</div><p>Querétaro</p></div>
+    <div class="coverage-state"><div class="flag">🌊</div><p>B.C. Sur</p></div>
+    <div class="coverage-state"><div class="flag">🌺</div><p>Aguascalientes</p></div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="testimonials-section">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">TESTIMONIOS</div>
+    <h2>Lo que Dicen Nuestros Clientes</h2>
+    <p>Miles de personas y empresas confían en nosotros cada día.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card scroll-reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Excelente servicio. Envié productos a Monterrey y llegaron al día siguiente en perfectas condiciones. El rastreo en tiempo real es increíble."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar" style="background:#FF6B00;">MC</div>
+        <div class="reviewer-info">
+          <strong>María Contreras</strong>
+          <span>Emprendedora, CDMX</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card scroll-reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Llevamos 2 años usando el plan empresarial y nunca hemos tenido problemas. El ejecutivo de cuenta nos atiende de inmediato. 100% recomendados."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar" style="background:#1A1A2E;">RL</div>
+        <div class="reviewer-info">
+          <strong>Roberto López</strong>
+          <span>Director de Operaciones, Guadalajara</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card scroll-reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Usé el servicio para enviar un regalo a Oaxaca y fue una experiencia perfecta. Precio justo, entrega puntual y el paquete llegó bien empacado."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar" style="background:#16213E;">AG</div>
+        <div class="reviewer-info">
+          <strong>Ana García</strong>
+          <span>Clienta particular, Puebla</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--light);">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">PREGUNTAS FRECUENTES</div>
+    <h2>Todo lo que Necesitas Saber</h2>
+    <p>Resolvemos tus dudas más comunes sobre nuestro servicio.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuánto tiempo tarda un envío estándar?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        El servicio estándar tiene un tiempo de entrega de 3 a 5 días hábiles dependiendo de la distancia entre el origen y el destino. Zonas metropolitanas y ciudades principales pueden recibir en 2-3 días.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cómo puedo rastrear mi paquete?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Puedes rastrear tu envío directamente en nuestra página web ingresando tu número de guía. También recibirás notificaciones automáticas por SMS y correo electrónico con cada actualización de estado.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Qué pasa si mi paquete se pierde o daña?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Todos nuestros envíos tienen una cobertura básica incluida. Si contrataste el seguro adicional, cubrimos el valor declarado de tu mercancía hasta $50,000 MXN. Nuestro equipo inicia la investigación en menos de 24 horas.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Puedo enviar artículos frágiles o de alto valor?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Sí, contamos con servicio especializado para artículos frágiles, electrónicos, obras de arte y objetos de valor. Se requiere embalaje especial y declaración de contenido. Contáctanos para más detalles.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Ofrecen servicio de recolección a domicilio?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Sí, ofrecemos recolección a domicilio en la mayoría de las ciudades. Agenda tu recolección con al menos 2 horas de anticipación a través de nuestra app, página web o WhatsApp. También puedes dejar tu paquete en cualquiera de nuestras sucursales.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuáles son las medidas máximas permitidas?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Las medidas máximas para envíos estándar son 150 cm en la suma de sus tres dimensiones (largo + ancho + alto) y un peso máximo de 70 kg. Para envíos que excedan estas medidas, consulta nuestro servicio de carga especial.
+      </div>
+    </div>
+    <div class="faq-item scroll-reveal">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        ¿Emiten facturas para empresas?
+        <i class="faq-icon">+</i>
+      </button>
+      <div class="faq-answer">
+        Sí, emitimos facturas CFDI válidas para todos nuestros servicios. Las empresas con plan empresarial reciben facturación mensual consolidada. Para solicitar tu factura, envíanos tus datos fiscales dentro de los 3 días hábiles posteriores a tu envío.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" class="contact-section">
+  <div class="section-header scroll-reveal">
+    <div class="section-tag">CONTÁCTANOS</div>
+    <h2>Estamos Aquí para Ayudarte</h2>
+    <p>Nuestro equipo está disponible para resolver todas tus dudas y necesidades de envío.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info scroll-reveal">
+      <h3>Información de Contacto</h3>
+      <p>Comunícate con nosotros por el canal que prefieras. Respondemos en menos de 2 horas en horario de atención.</p>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📞</div>
+        <div>
+          <strong>Teléfono Principal</strong>
+          <span>800 123 4567 (Lada sin costo)</span>
+          <span>55 1234 5678 (Ciudad de México)</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">💬</div>
+        <div>
+          <strong>WhatsApp</strong>
+          <span>+52 55 9876 5432</span>
+          <span>Atención inmediata 8 am – 10 pm</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">📧</div>
+        <div>
+          <strong>Correo Electrónico</strong>
+          <span>contacto@paquetexpress.mx</span>
+          <span>soporte@paquetexpress.mx</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">🏢</div>
+        <div>
+          <strong>Oficina Central</strong>
+          <span>Av. Insurgentes Sur 1234, Piso 5</span>
+          <span>Col. Del Valle, CDMX, C.P. 03100</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-detail-icon">🕐</div>
+        <div>
+          <strong>Horario de Atención</strong>
+          <span>Lunes a Viernes: 7:00 am – 10:00 pm</span>
+          <span>Sábado y Domingo: 8:00 am – 6:00 pm</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form scroll-reveal">
+      <h3 style="margin-bottom:25px;color:var(--secondary);">Envíanos un Mensaje</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" id="fNombre" placeholder="Tu nombre" />
+        </div>
+        <div class="form-group">
+          <label>Apellido *</label>
+          <input type="text" id="fApellido" placeholder="Tu apellido" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Correo Electrónico *</label>
+        <input type="email" id="fEmail" placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="tel" id="fTel" placeholder="55 1234 5678" />
+      </div>
+      <div class="form-group">
+        <label>Tipo de Consulta</label>
+        <select id="fTipo">
+          <option>Cotización de envío</option>
+          <option>Rastreo de paquete</option>
+          <option>Reclamación o queja</option>
+          <option>Plan empresarial</option>
+          <option>Facturación</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mensaje *</label>
+        <textarea id="fMensaje" placeholder="Describe tu consulta o necesidad de envío..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="enviarForm()" style="width:100%;font-size:1rem;">Enviar Mensaje 📨</button>
+      <div class="form-success" id="formSuccess">
+        ✅ ¡Mensaje enviado con éxito! Te contactaremos en menos de 2 horas.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#inicio" class="logo">
+        <div class="logo-icon">📦</div>
+        <div class="logo-text">Paquete<span>Express</span></div>
+      </a>
+      <p>La empresa de paquetería nacional líder en confiabilidad. Conectando a México desde 2010 con más de 50,000 clientes satisfechos.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📘</a>
+        <a href="#" class="social-link">📷</a>
+        <a href="#" class="social-link">🐦</a>
+        <a href="#" class="social-link">▶️</a>
+        <a href="#" class="social-link">💼</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <ul>
+        <li><a href="#servicios">Envío Express</a></li>
+        <li><a href="#servicios">Envío Estándar</a></li>
+        <li><a href="#servicios">Plan Empresarial</a></li>
+        <li><a href="#servicios">Carga Especial</a></li>
+        <li><a href="#servicios">Devoluciones</a></li>
+        <li><a href="#servicios">Envío Asegurado</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#">Quiénes Somos</a></li>
+        <li><a href="#">Trabaja con Nosotros</a></li>
+        <li><a href="#">Nuestras Sucursales</a></li>
+        <li><a href="#">Blog y Noticias</a></li>
+        <li><a href="#">Responsabilidad Social</a></li>
+        <li><a href="#">Certificaciones</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Soporte</h4>
+      <ul>
+        <li><a href="#rastreo">Rastrear Envío</a></li>
+        <li><a href="#faq">Preguntas Frecuentes</a></li>
+        <li><a href="#contacto">Centro de Ayuda</a></li>
+        <li><a href="#">Tarifas y Precios</a></li>
+        <li><a href="#">Términos de Servicio</a></li>
+        <li><a href="#">Aviso de Privacidad</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 PaquetExpress Nacional. Todos los derechos reservados.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+      <a href="#">Cookies</a>
+      <a href="#">Mapa del Sitio</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/525598765432" class="whatsapp-float" target="_blank" title="Chateanos por WhatsApp">💬</a>
+
+<script>
+  // MENU MÓVIL
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Cerrar menú al hacer scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+
+  // RASTREO
+  function trackPackage() {
+    const input = document.getElementById('trackingInput').value.trim();
+    const result = document.getElementById('trackingResult');
+    if (!input) { alert('Por favor ingresa un número de guía.'); return; }
+
+    const estados = [
+      { estado: '✅ Entregado', desc: 'Tu paquete fue entregado exitosamente.', fecha: 'Hoy, 10:35 am' },
+      { estado: '🚚 En camino', desc: 'Tu paquete está en ruta hacia su destino final.', fecha: 'Hoy, 7:00 am' },
+      { estado: '📦 En bodega', desc: 'Tu paquete llegó a la bodega regional.', fecha: 'Ayer, 11:20 pm' },
+      { estado: '🔄 En tránsito', desc: 'Paquete en movimiento entre centros de distribución.', fecha: 'Ayer, 3:45 pm' },
+      { estado: '📬 Recolectado', desc: 'Tu paquete fue recogido por nuestro mensajero.', fecha: 'Hace 2 días' },
+    ];
+
+    const e = estados[Math.floor(Math.random() * estados.length)];
+    result.style.display = 'block';
+    result.innerHTML = `
+      <strong style="color:var(--primary);font-size:1.1rem;">${e.estado}</strong><br>
+      <p style="margin:8px 0;color:#555;">${e.desc}</p>
+      <p style="color:var(--gray);font-size:0.9rem;">📅 ${e.fecha} &nbsp;|&nbsp; 📦 Guía: <strong>${input}</strong></p>
+      <div style="margin-top:15px;">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          ${['Recolectado','En tránsito','Bodega regional','En camino','Entregado'].map((s,i) =>
+            `<span style="flex:1;min-width:80px;padding:8px 5px;background:${i<=2?'var(--primary)':'#e0e0e0'};color:${i<=2?'white':'#999'};border-radius:6px;font-size:0.75rem;text-align:center;">${s}</span>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Rastrear con Enter
+  document.getElementById('trackingInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') trackPackage();
+  });
+
+  // COTIZADOR
+  function calcularCotizacion() {
+    const peso = parseFloat(document.getElementById('cPeso').value) || 1;
+    const base = parseInt(document.getElementById('cServicio').value);
+    const extra = peso > 5 ? (peso - 5) * 8 : 0;
+    const total = base + extra + Math.floor(Math.random() * 20);
+    const result = document.getElementById('cotizacionResult');
+    document.getElementById('cotizacionPrecio').textContent = `$${total} MXN`;
+    result.style.display = 'block';
+  }
+
+  // FAQ
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('.faq-icon');
+    answer.classList.toggle('open');
+    icon.classList.toggle('open');
+  }
+
+  // FORMULARIO
+  function enviarForm() {
+    const n = document.getElementById('fNombre').value;
+    const e = document.getElementById('fEmail').value;
+    const m = document.getElementById('fMensaje').value;
+    if (!n || !e || !m) { alert('Por favor completa los campos obligatorios (*)'); return; }
+    document.getElementById('formSuccess').style.display = 'block';
+    setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 5000);
+  }
+
+  // SCROLL REVEAL
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = a.getAttribute('href');
+      const el = document.querySelector(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
